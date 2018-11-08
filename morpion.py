@@ -38,5 +38,5 @@ class Morpion(object):
         pass
     
     
-def ren(mor):
+def run(mor):
     pass
