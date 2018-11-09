@@ -16,6 +16,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import platform
+import os
+
+def clear_screen():
+    if platform.platform() == 'Windows':
+        os.system("CLS")
+    else:
+        os.system("clear")
+
 class Morpion(object):
     
     def __init__(self, chars=[" ", "X", "O"]):
@@ -31,9 +40,12 @@ class Morpion(object):
             return 1
         elif self.grid[cell[0]][cell[1]] != 0:
             return 2
+        else:
+            self.grid[cell[0]][cell[1]] = player
         return 0
     
     def disp(self):
+        clear_screen()
         print("      A   B   C  ")
         i = 1
         for line in self.grid:
@@ -52,5 +64,6 @@ def parse(command):
     return 0
 
 def run(game):
+#    turn = 0
     game.disp()
     pass
