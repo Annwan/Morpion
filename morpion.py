@@ -15,25 +15,67 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-   
 """
+import platform
+import os
+
+def clear_screen():
+    if platform.platform() == 'Windows':
+        os.system("CLS")
+    else:
+        os.system("clear")
+
 class Morpion(object):
     
-    def __init__(self):
-        pass
+    def __init__(self, chars=[" ", "X", "O"]):
+        self.grid = [[0 for i in range(3)] for i in range(3)]
+        self.disp_chars = chars
     
     def reinit(self):
-        pass
+        self.grid = [[0 for i in range(3)] for i in range(3)]
+        
     
-    def play(self, case, player):
-        pass
+    def play(self, cell, player):
+        if not (0 <= cell[0] and cell[0]<3 and 0<=cell[1] and cell[1]<3):
+            return 1
+        elif self.grid[cell[0]][cell[1]] != 0:
+            return 2
+        else:
+            self.grid[cell[0]][cell[1]] = player
+        return 0
     
     def disp(self):
-        pass
+        clear_screen()
+        print("      A   B   C  ")
+        i = 1
+        for line in self.grid:
+            print("    +---+---+---+")
+            print("  " + str(i), end=" ")
+            i = i + 1
+            for cell in line:
+                print("| " + self.disp_chars[cell], end=" ")
+            print("|")
+        print("    +---+---+---+")
     
     def check_win(self):
-        pass
+        if (self.grid[0][0] == self.grid[1][0] == self.grid[2][0] or
+            self.grid[0][0] == self.grid[0][1] == self.grid[0][2] or
+            self.grid[0][0] == self.grid[1][1] == self.grid[2][2]):
+            return self.grid[0][0]
+        elif (self.grid[0][1] == self.grid[1][1] == self.grid[2][1] or
+              self.grid[1][0] == self.grid[1][1] == self.grid[1][2] or
+              self.grid[0][2] == self.grid[1][1] == self.grid[2][0]):
+            return self.grid[1][1]
+        elif (self.grid[2][0] == self.grid[2][1] == self.grid[2][2] or
+              self.grid[0][2] == self.grid[1][2] == self.grid[2][2]):      
+            return self.grid[2][2]
+        else:
+            return 0 
     
-    
-def run(mor):
+def parse(command):
+    return 0
+
+def run(game):
+#    turn = 0
+    game.disp()
     pass
