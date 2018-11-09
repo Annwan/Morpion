@@ -58,7 +58,19 @@ class Morpion(object):
         print("    +---+---+---+")
     
     def check_win(self):
-        return 0
+        if (self.grid[0][0] == self.grid[1][0] == self.grid[2][0] or
+            self.grid[0][0] == self.grid[0][1] == self.grid[0][2] or
+            self.grid[0][0] == self.grid[1][1] == self.grid[2][2]):
+            return self.grid[0][0]
+        elif (self.grid[0][1] == self.grid[1][1] == self.grid[2][1] or
+              self.grid[1][0] == self.grid[1][1] == self.grid[1][2] or
+              self.grid[0][2] == self.grid[1][1] == self.grid[2][0]):
+            return self.grid[1][1]
+        elif (self.grid[2][0] == self.grid[2][1] == self.grid[2][2] or
+              self.grid[0][2] == self.grid[1][2] == self.grid[2][2]):      
+            return self.grid[2][2]
+        else:
+            return 0 
     
 def parse(command):
     return 0
