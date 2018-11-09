@@ -73,8 +73,23 @@ class Morpion(object):
             return 0 
     
 def parse(command):
-    return 0
-
+    cmds = []
+    inst = ""
+    command = command + " "
+    for c in command:
+        if c == " ":
+            cmds.append(inst)
+            inst = ""
+        else:
+            inst = inst + c
+    cmds.append(inst)
+    to_pop = []
+    for i in range(len(cmds)-1, -1, -1):
+        if cmds[i] == '':
+            to_pop.append(i)
+    for i in to_pop:
+        cmds.pop(i)
+    return cmds
 def run(game):
 #    turn = 0
     game.disp()
