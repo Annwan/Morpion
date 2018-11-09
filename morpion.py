@@ -20,15 +20,25 @@
 class Morpion(object):
     
     def __init__(self):
-        pass
+        self.grid = [[0 for i in range(3)] for i in range(3)]
+        self.disp_chars = [" ", "X", "O"]
     
     def reinit(self):
+        self.grid = [[0 for i in range(3)] for i in range(3)]
         pass
     
-    def play(self, case, player):
+    def play(self, cell, player):
         pass
     
     def disp(self):
+        for line in self.grid:
+            print("+---+---+---+")
+            print("|   |   |   |")
+            for cell in line:
+                print("| " + self.disp_chars[cell], end=" ")
+            print("|")
+            print("|   |   |   |")
+        print("+---+---+---+")
         pass
     
     def check_win(self):
@@ -36,4 +46,5 @@ class Morpion(object):
     
     
 def run(mor):
+    mor.disp()
     pass
