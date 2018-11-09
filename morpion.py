@@ -15,36 +15,42 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-   
 """
 class Morpion(object):
     
-    def __init__(self):
+    def __init__(self, chars=[" ", "X", "O"]):
         self.grid = [[0 for i in range(3)] for i in range(3)]
-        self.disp_chars = [" ", "X", "O"]
+        self.disp_chars = chars
     
     def reinit(self):
         self.grid = [[0 for i in range(3)] for i in range(3)]
-        pass
+        
     
     def play(self, cell, player):
-        pass
+        if not (0 <= cell[0] and cell[0]<3 and 0<=cell[1] and cell[1]<3):
+            return 1
+        elif self.grid[cell[0]][cell[1]] != 0:
+            return 2
+        return 0
     
     def disp(self):
+        print("      A   B   C  ")
+        i = 1
         for line in self.grid:
-            print("+---+---+---+")
-            print("|   |   |   |")
+            print("    +---+---+---+")
+            print("  " + str(i), end=" ")
+            i = i + 1
             for cell in line:
                 print("| " + self.disp_chars[cell], end=" ")
             print("|")
-            print("|   |   |   |")
-        print("+---+---+---+")
-        pass
+        print("    +---+---+---+")
     
     def check_win(self):
-        pass
+        return 0
     
-    
-def run(mor):
-    mor.disp()
+def parse(command):
+    return 0
+
+def run(game):
+    game.disp()
     pass
