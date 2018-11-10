@@ -33,11 +33,15 @@ def clear_screen():
 class Morpion(object):
     
     def __init__(self, chars=[" ", "X", "O"]):
-        self.grid = [[0 for i in range(3)] for i in range(3)]
+        self.grid = [[0, 0, 0],
+                     [0, 0, 0],
+                     [0, 0, 0]]
         self.disp_chars = chars
     
     def reinit(self):
-        self.grid = [[0 for i in range(3)] for i in range(3)]
+        self.grid = [[0, 0, 0],
+                     [0, 0, 0],
+                     [0, 0, 0]]
         
     
     def play(self, cell, player):
@@ -63,17 +67,29 @@ class Morpion(object):
         print("    +---+---+---+")
     
     def check_win(self):
-        if (self.grid[0][0] == self.grid[1][0] == self.grid[2][0] or
-            self.grid[0][0] == self.grid[0][1] == self.grid[0][2] or
-            self.grid[0][0] == self.grid[1][1] == self.grid[2][2]):
-            return self.grid[0][0]
-        elif (self.grid[0][1] == self.grid[1][1] == self.grid[2][1] or
-              self.grid[1][0] == self.grid[1][1] == self.grid[1][2] or
-              self.grid[0][2] == self.grid[1][1] == self.grid[2][0]):
-            return self.grid[1][1]
-        elif (self.grid[2][0] == self.grid[2][1] == self.grid[2][2] or
-              self.grid[0][2] == self.grid[1][2] == self.grid[2][2]):      
-            return self.grid[2][2]
+        A1 = self.grid[0][0]
+        B1 = self.grid[0][1]
+        C1 = self.grid[0][2]
+        A2 = self.grid[1][0]
+        B2 = self.grid[1][1]
+        C2 = self.grid[1][2]
+        A3 = self.grid[2][0]
+        B3 = self.grid[2][1]
+        C3 = self.grid[2][2]
+        if A1 == B1 and A1 == C1:
+            return A1
+        elif A1 == A2 and A1 == A3:
+            return A1
+        elif B1 == B2 and B1 == B3:
+            return B1
+        elif A2 == B2 and A2 == C2:
+            return A2
+        elif C1 == C2 and C1 == C3:
+            return C1
+        elif A1 == B2 and A1 == C3:
+            return A1
+        elif C1 == B2 and C1 == A3:
+            return C1
         else:
             full = True
             for line in self.grid:
@@ -111,7 +127,7 @@ def run(game):
         played = False
         if p1_turn:
             game.disp()
-            inp = input("Au tour du Joueur 1\n>>> ")
+            inp = input("Au tour du Joueur 1 (h pour l'aide)\n>>> ")
             cmd = parse(inp)
             if cmd == []:
                 cmd = [None]
@@ -139,15 +155,18 @@ def run(game):
             elif cmd[0] in ["REJOUER", "RJ", "R"]:
                 quited = True
                 rep  = True
-            
+            elif cmd[0] == "H":
+                clear_screen()
+                print("Pour jouer une case entrez :\n    jouer <coordonées>\n    j <coordonées>\noù <coordonées> sont les coordonées de la case telles que A1\nPour relancer la partie, entrez:\n    rejouer\n    rj\n    r\nPour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n    quiter\n    quit\n    q\n")
+                time.sleep(2)
             else:
                 print("commande invalide")
                 time.sleep(2)
-            
+
         
         else:
             game.disp()
-            inp = input("Au tour du Joueur 2\n>>> ")
+            inp = input("Au tour du Joueur 2 (h pour l'aide)\n>>> ")
             cmd = parse(inp)
             if cmd == []:
                 cmd = [None]
@@ -176,6 +195,11 @@ def run(game):
                 quited = True
                 rep  = True
             
+            elif cmd[0] == "H":
+                clear_screen()
+                print("Pour jouer une case entrez :\n    jouer <coordonées>\n    j <coordonées>\noù <coordonées> sont les coordonées de la case telles que A1\nPour relancer la partie, entrez:\n    rejouer\n    rj\n    r\nPour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n    quiter\n    quit\n    q\n")
+                time.sleep(2)
+            
             else:
                 print("commande invalide")
                 time.sleep(2)
@@ -184,6 +208,7 @@ def run(game):
         if played:
             p1_turn = not p1_turn
             
+    game.disp()
     if not quited:
         srep = input("Voulez-vous rejouer ?(o/n)").lower()
         if srep == "n":
@@ -195,3 +220,10 @@ def run(game):
     
     return rep
     
+
+if __name__ == '__main__':
+    replay = True
+    mor = Morpion()
+    while replay:
+        replay = run(mor)
+        mor.reinit()
