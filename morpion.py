@@ -50,7 +50,7 @@ class Morpion(object):
         i = 1
         for line in self.grid:
             print("    +---+---+---+")
-            print("  " + str(i), end=" ")
+            print(" ", end=" ")
             i = i + 1
             for cell in line:
                 print("| " + self.disp_chars[cell], end=" ")
@@ -70,7 +70,15 @@ class Morpion(object):
               self.grid[0][2] == self.grid[1][2] == self.grid[2][2]):      
             return self.grid[2][2]
         else:
-            return 0 
+            full = True
+            for line in self.grid:
+                for cell in line:
+                    if cell == 0:
+                        full == False
+            if not full:
+                return 0
+            else:
+                return 3
     
 def parse(command):
     cmds = []
@@ -78,11 +86,10 @@ def parse(command):
     command = command + " "
     for c in command:
         if c == " ":
-            cmds.append(inst)
+            cmds.append(inst.upper())
             inst = ""
         else:
             inst = inst + c
-    cmds.append(inst)
     to_pop = []
     for i in range(len(cmds)-1, -1, -1):
         if cmds[i] == '':
@@ -91,6 +98,25 @@ def parse(command):
         cmds.pop(i)
     return cmds
 def run(game):
-#    turn = 0
-    game.disp()
-    pass
+    p1_turn = True
+    quited = False
+    while not(game.check_win() or quited):
+        played = False
+        if p1_turn:
+            game.disp()
+            inp = input("Au tour du Joueur 1\n>>> ")
+            command = parse(inp)
+            if command == []:
+                command = [None]
+            if command[0] in ["MARK", "MK", "M"]:
+                played = True
+                pass
+            elif command[0] in ["QUIT", "QU", "Q"]:
+                quited = True
+                pass
+            else:
+                print("commande invalide")
+            pass
+#        if played:
+#            p1_turn = not p1_turn
+    
