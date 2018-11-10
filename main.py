@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-    Copyright (C) 2018 Konganwan
+    Copyright © 2018 Antoine COMBET
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,5 +20,8 @@
 from morpion import Morpion, run
 
 if __name__ == '__main__':
+    replay = True
     mor = Morpion()
-    run(mor)
+    while replay:
+        replay = run(mor)
+        mor.reinit()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-    Copyright (C) 2018 Konganwan
+    Copyright © 2018 Antoine COMBET
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +18,11 @@
 """
 import platform
 import os
+import time
+
+COORD_CONV = {"A1":(0,0), "B1":(0,1), "C1":(0,2),
+              "A2":(1,0), "B2":(1,1), "C2":(1,2),
+              "A3":(2,0), "B3":(2,1), "C3":(2,2)}
 
 def clear_screen():
     if platform.platform() == 'Windows':
@@ -50,7 +55,7 @@ class Morpion(object):
         i = 1
         for line in self.grid:
             print("    +---+---+---+")
-            print(" ", end=" ")
+            print("  " + str(i), end=" ")
             i = i + 1
             for cell in line:
                 print("| " + self.disp_chars[cell], end=" ")
@@ -97,7 +102,9 @@ def parse(command):
     for i in to_pop:
         cmds.pop(i)
     return cmds
+
 def run(game):
+    rep = True
     p1_turn = True
     quited = False
     while not(game.check_win() or quited):
@@ -105,18 +112,86 @@ def run(game):
         if p1_turn:
             game.disp()
             inp = input("Au tour du Joueur 1\n>>> ")
-            command = parse(inp)
-            if command == []:
-                command = [None]
-            if command[0] in ["MARK", "MK", "M"]:
-                played = True
-                pass
-            elif command[0] in ["QUIT", "QU", "Q"]:
+            cmd = parse(inp)
+            if cmd == []:
+                cmd = [None]
+            
+            if cmd[0] in ["JOUER", "J"] and len(cmd)>=2:
+                if cmd[1] in COORD_CONV.keys():
+                    result = game.play(COORD_CONV[cmd[1]],1)
+                    if result == 2: #case déja utilisée
+                        print("Case " + cmd[1] + " déjà occupée")
+                        time.sleep(2)
+                    
+                    else:
+                        played = True
+                
+                
+                else:
+                    print("coordonnés invalides")
+                    time.sleep(2)
+                
+            
+            elif cmd[0] in ["QUITER", "QUIT", "Q"]:
                 quited = True
-                pass
+                rep = False
+            
+            elif cmd[0] in ["REJOUER", "RJ", "R"]:
+                quited = True
+                rep  = True
+            
             else:
                 print("commande invalide")
-            pass
-#        if played:
-#            p1_turn = not p1_turn
+                time.sleep(2)
+            
+        
+        else:
+            game.disp()
+            inp = input("Au tour du Joueur 2\n>>> ")
+            cmd = parse(inp)
+            if cmd == []:
+                cmd = [None]
+            
+            if cmd[0] in ["JOUER", "J"] and len(cmd)>=2:
+                if cmd[1] in COORD_CONV.keys():
+                    result = game.play(COORD_CONV[cmd[1]],2)
+                    if result == 2:
+                        print("Case " + cmd[1] + " déjà occupée")
+                        time.sleep(2)
+                    
+                    else:
+                        played = True
+                
+                
+                else:
+                    print("coordonnés invalides")
+                    time.sleep(2)
+                    
+            
+            elif cmd[0] in ["QUITER", "QUIT", "Q"]:
+                quited = True
+                rep = False
+            
+            elif cmd[0] in ["REJOUER", "RJ", "R"]:
+                quited = True
+                rep  = True
+            
+            else:
+                print("commande invalide")
+                time.sleep(2)
+            
+        
+        if played:
+            p1_turn = not p1_turn
+            
+    if not quited:
+        srep = input("Voulez-vous rejouer ?(o/n)").lower()
+        if srep == "n":
+            rep = False
+        
+        else:
+            rep = True
+            
+    
+    return rep
     
