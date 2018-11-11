@@ -237,6 +237,11 @@ def run(game):
     
 
 if __name__ == '__main__':
+    print("""   Morpion  Copyright © 2018  Antoine COMBET
+    This program comes with ABSOLUTELY NO WARRANTY.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions.
+    See https://www.gnu.org/licenses/gpl.html for details."""
     replay = True
     mor = Morpion()
     while replay:
