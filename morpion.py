@@ -210,6 +210,11 @@ def run(game):
             
     game.disp()
     if not quited:
+        if not game.check_win() == 3:
+            print('Le joueur ' + str(game.check_win()) + ' a gagné')
+        else:
+            print('Match nul')
+        print()
         srep = input("Voulez-vous rejouer ?(o/n)").lower()
         if srep == "n":
             rep = False
@@ -217,7 +222,9 @@ def run(game):
         else:
             rep = True
             
-    
+    if rep:
+        print('Nouvelle Partie')
+        time.sleep(2)
     return rep
     
 
