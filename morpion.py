@@ -131,7 +131,7 @@ def run(game):
             cmd = parse(inp)
             if cmd == []:
                 cmd = [None]
-            
+
             if cmd[0] in ["JOUER", "J"] and len(cmd)>=2:
                 if cmd[1] in COORD_CONV.keys():
                     result = game.play(COORD_CONV[cmd[1]],1)
@@ -241,7 +241,8 @@ if __name__ == '__main__':
     This program comes with ABSOLUTELY NO WARRANTY.
     This is free software, and you are welcome to redistribute it
     under certain conditions.
-    See https://www.gnu.org/licenses/gpl.html for details."""
+    See https://www.gnu.org/licenses/gpl.html for details.""")
+    time.sleep(2)
     replay = True
     mor = Morpion()
     while replay:
