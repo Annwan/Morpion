@@ -157,7 +157,11 @@ def run(game):
                 rep  = True
             elif cmd[0] == "H":
                 clear_screen()
-                print("Pour jouer une case entrez :\n    jouer <coordonées>\n    j <coordonées>\noù <coordonées> sont les coordonées de la case telles que A1\nPour relancer la partie, entrez:\n    rejouer\n    rj\n    r\nPour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n    quiter\n    quit\n    q\n")
+                print("Pour jouer une case entrez :\n    jouer <coordonées>\n"+
+                      "    j <coordonées>\noù <coordonées> sont les coordonées de la case telles que A1\n"+
+                      "Pour relancer la partie, entrez:\n    rejouer\n    rj\n    r\n"+
+                      "Pour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n"+
+                      "    quiter\n    quit\n    q\n")
                 time.sleep(2)
             else:
                 print("commande invalide")
@@ -197,7 +201,11 @@ def run(game):
             
             elif cmd[0] == "H":
                 clear_screen()
-                print("Pour jouer une case entrez :\n    jouer <coordonées>\n    j <coordonées>\noù <coordonées> sont les coordonées de la case telles que A1\nPour relancer la partie, entrez:\n    rejouer\n    rj\n    r\nPour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n    quiter\n    quit\n    q\n")
+                print("Pour jouer une case entrez :\n    jouer <coordonées>\n"+
+                      "    j <coordonées>\noù <coordonées> sont les coordonées de la case telles que A1\n"+
+                      "Pour relancer la partie, entrez:\n    rejouer\n    rj\n    r\n"+
+                      "Pour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n"+
+                      "    quiter\n    quit\n    q\n")
                 time.sleep(2)
             
             else:
