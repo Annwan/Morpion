@@ -95,7 +95,7 @@ class Morpion(object):
             for line in self.grid:
                 for cell in line:
                     if cell == 0:
-                        full == False
+                        full = False
             if not full:
                 return 0
             else:
