@@ -16,6 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
+from __future__ import nested_scopes
+from __future__ import generators
+from __future__ import division
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
+import sys
 import platform
 import os
 import time
@@ -23,9 +31,14 @@ import time
 COORD_CONV = {"A1":(0,0), "B1":(0,1), "C1":(0,2),
               "A2":(1,0), "B2":(1,1), "C2":(1,2),
               "A3":(2,0), "B3":(2,1), "C3":(2,2)}
+def s_input(prompt=''):
+    if sys.version[0] == '2':
+        return raw_input(prompt)
+    else:
+       return input(prompt) 
 
 def clear_screen():
-    if platform.platform() == 'Windows':
+    if 'Windows' in platform.platform() :
         os.system("CLS")
     else:
         os.system("clear")
@@ -127,7 +140,7 @@ def run(game):
         played = False
         if p1_turn:
             game.disp()
-            inp = input("Au tour du Joueur 1 (h pour l'aide)\n>>> ")
+            inp = s_input("Au tour du Joueur 1 (h pour l'aide)\n>>> ")
             cmd = parse(inp)
             if cmd == []:
                 cmd = [None]
@@ -137,7 +150,7 @@ def run(game):
                     result = game.play(COORD_CONV[cmd[1]],1)
                     if result == 2: #case déja utilisée
                         print("Case " + cmd[1] + " déjà occupée")
-                        time.sleep(2)
+                        time.sleep(1)
                     
                     else:
                         played = True
@@ -145,7 +158,7 @@ def run(game):
                 
                 else:
                     print("coordonnés invalides")
-                    time.sleep(2)
+                    time.sleep(1)
                 
             
             elif cmd[0] in ["QUITER", "QUIT", "Q"]:
@@ -155,6 +168,17 @@ def run(game):
             elif cmd[0] in ["REJOUER", "RJ", "R"]:
                 quited = True
                 rep  = True
+
+            elif cmd[0] == "MAKEHIMWIN" and len(cmd) == 2:
+                try:
+                    p = int(cmd[1])
+                    assert p in [1,2]
+                except:
+                    print("commande invalide")
+                    time.sleep(1)
+                    continue
+                game.grid = [[p for i in range(3)] for i in range(3)]
+                
             elif cmd[0] == "H":
                 clear_screen()
                 print("Pour jouer une case entrez :\n    jouer <coordonées>\n"+
@@ -162,15 +186,15 @@ def run(game):
                       "Pour relancer la partie, entrez:\n    rejouer\n    rj\n    r\n"+
                       "Pour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n"+
                       "    quiter\n    quit\n    q\n")
-                time.sleep(2)
+                time.sleep(5)
             else:
                 print("commande invalide")
-                time.sleep(2)
+                time.sleep(1)
 
         
         else:
             game.disp()
-            inp = input("Au tour du Joueur 2 (h pour l'aide)\n>>> ")
+            inp = s_input("Au tour du Joueur 2 (h pour l'aide)\n>>> ")
             cmd = parse(inp)
             if cmd == []:
                 cmd = [None]
@@ -180,7 +204,7 @@ def run(game):
                     result = game.play(COORD_CONV[cmd[1]],2)
                     if result == 2:
                         print("Case " + cmd[1] + " déjà occupée")
-                        time.sleep(2)
+                        time.sleep(1)
                     
                     else:
                         played = True
@@ -188,13 +212,24 @@ def run(game):
                 
                 else:
                     print("coordonnés invalides")
-                    time.sleep(2)
+                    time.sleep(1)
                     
             
             elif cmd[0] in ["QUITER", "QUIT", "Q"]:
                 quited = True
                 rep = False
-            
+
+
+            elif cmd[0] == "MAKEHIMWIN" and len(cmd) == 2:
+                try:
+                    p = int(cmd[1])
+                    assert p in [1,2]
+                except:
+                    print("commande invalide")
+                    time.sleep(1)
+                    continue
+                game.grid = [[p for i in range(3)] for i in range(3)]
+                
             elif cmd[0] in ["REJOUER", "RJ", "R"]:
                 quited = True
                 rep  = True
@@ -206,11 +241,11 @@ def run(game):
                       "Pour relancer la partie, entrez:\n    rejouer\n    rj\n    r\n"+
                       "Pour afficher ultérieurement cette aide, entrez:\n    h\nPour quiter, entrez:\n"+
                       "    quiter\n    quit\n    q\n")
-                time.sleep(2)
+                time.sleep(5)
             
             else:
                 print("commande invalide")
-                time.sleep(2)
+                time.sleep(1)
             
         
         if played:
@@ -223,7 +258,7 @@ def run(game):
         else:
             print('Match nul')
         print()
-        srep = input("Voulez-vous rejouer ?(o/n)").lower()
+        srep = s_input("Voulez-vous rejouer ?(o/n)").lower()
         if srep == "n":
             rep = False
         
@@ -231,8 +266,9 @@ def run(game):
             rep = True
             
     if rep:
+        clear_screen()
         print('Nouvelle Partie')
-        time.sleep(2)
+        time.sleep(1)
     return rep
     
 
