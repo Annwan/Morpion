@@ -70,12 +70,16 @@ class SmartBot(Bot):
         
     def choose(self):
         if self.turn == 0 and self.pid == 1:
+            self.turn += 1
             return 0,0
         elif self.turn == 0 and self.pid == 2 and self.game.grid[1][1] != 0:
+            self.turn += 1
             return 0,0
         elif self.turn == 0 and self.pid == 2:
+            self.turn += 1
             return 1,1
         else:
+            self.turn += 1
             p = self.block_opp()
             if p[0] is None:
                 found = False
