@@ -27,7 +27,7 @@ class Bot(object):
         return 0,0
 
     def play(self):
-        return self.game.play(self.choose, self.pid)
+        return self.game.play(self.choose(), self.pid)
     
     
 
