@@ -28,12 +28,15 @@ import platform
 import os
 import time
 
+from morpion_bots import DumbBot, SmartBot
+
 COORD_CONV = {"A1":(0,0), "B1":(0,1), "C1":(0,2),
               "A2":(1,0), "B2":(1,1), "C2":(1,2),
               "A3":(2,0), "B3":(2,1), "C3":(2,2)}
 def s_input(prompt=''):
     if sys.version[0] == '2':
-        return raw_input(prompt)
+#        return raw_input(prompt)
+        pass
     else:
        return input(prompt) 
 
