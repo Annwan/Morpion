@@ -30,7 +30,7 @@ import time
 from random import random
 
 try:
-    from morpion_bot import DumbBot#, SmartBot
+    from morpion_bot import DumbBot, SmartBot
 except ImportError:
     BOTS = False
 else:
@@ -282,7 +282,7 @@ def run2j(game):
         time.sleep(1)
     return rep
 
-def rundb(game):
+def runbot(game, t):
     clear_screen()
     rep = True
     quited = False
@@ -298,7 +298,10 @@ def rundb(game):
         p = 2
         print("Vous serez le joueur 2, l'ordinateur le joueur 1.")
         time.sleep(1)
-    bot = DumbBot(game, a)
+    if t:
+        bot = SmartBot(game, a)
+    else:
+        bot = DumbBot(game, a)
     while not(game.check_win() or quited):
         played = False
         if p_turn:
@@ -407,9 +410,9 @@ if __name__ == '__main__':
         if mode == '0':
             replay = run2j(mor)
         elif mode == '1':
-            replay = rundb(mor)
+            replay = runbot(mor, 0)
         elif mode == '2':
-            pass
+            replay = runbot(mor, 1)
         else:
             pass
         mor.reinit()
