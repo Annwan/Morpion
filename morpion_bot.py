@@ -16,23 +16,34 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import abc
-
-class Bot(abc.ABC):
-    def __init__(self, game):
+from random import randint
+class Bot(object):
+    def __init__(self, game, pid):
+        self.game = game
+        self.pid = pid
         pass
     
-    @abc.abstractclassmethod
-    def play(self):
-        pass
-    
-    @abc.abstractclassmethod
     def choose(self):
-        pass
+        return 0,0
+
+    def play(self):
+        return self.game.play(self.choose, self.pid)
+    
     
 
 class SmartBot(Bot):
-    pass
+    def __init__(self, game, pid):
+        Bot.__init__(self, game, pid)
 
 class DumbBot(Bot):
-    pass
+    def __init__(self, game, pid):
+        Bot.__init__(self, game, pid)
+        
+    def choose(self):
+        found = False
+        while not found:
+            row = randint(0,2)
+            col = randint(0,2)
+            if self.game.grid[row][col] == 0:
+                found = True
+        return row, col
