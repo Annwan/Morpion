@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-    Copyright © 2018 Antoine COMBET
+    Copyright © 2019 Antoine COMBET
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import time
 from random import random
 
 try:
-    from morpion_bot import DumbBot, SmartBot
+    from morpion_bots import DumbBot, SmartBot
 except ImportError:
     BOTS = False
 else:
