@@ -33,7 +33,7 @@ class GUIMor(Morpion):
         self.nWidth = nCanvasWidth
         
 # override display function
-    def disp(self, ignore = 0):
+    def disp(self):
         self.cCanvas.delete(ALL)
         for i in range(3):
             self.cCanvas.create_line((i*nCanvasWidth)//3 , 0, (i*nCanvasWidth)//3  , nCanvasHeight, width = 3)
@@ -52,9 +52,18 @@ def replay(mGame):
     mGame.reinit()
     nPlayer = 1
     bWon = False
+    show()
+
+def show():
+    if not bWon:
+        mGame.disp()
+    else:
+        return None
 
 def onCanvasClick(event):
     global nPlayer, bWon
+    mGame.cCanvas.delete(ALL)
+    show()
     if bWon : return None
     nCol = (3 * event.x)//nCanvasWidth
     nRow = (3 * event.y)//nCanvasHeight
@@ -65,24 +74,28 @@ def onCanvasClick(event):
     if nWinner in [-1, 1, 3]:
         bWon = True
         if nWinner == -1:
-            pass
+            mGame.cCanvas.delete(ALL)
+            mGame.cCanvas.create_text(150, 150, text="Player 2 Won !")
         elif nWinner == 1:
+            mGame.cCanvas.delete(ALL)
+            mGame.cCanvas.create_text(150, 150, text="Player 1 Won !")
             pass
         elif nWinner == 3:
-            pass
+            mGame.cCanvas.delete(ALL)
+            mGame.cCanvas.create_text(150, 150, text="Match Nul!")
+    show()
 
-
-wApp = Tk()
-cGrid = Canvas(wApp, bg=sCanvasBG, height=nCanvasHeight, width=nCanvasWidth)
-cGrid.grid(row=0, column=0, columnspan=2 ,rowspan=2, padx = 3, pady = 3)
-mGame = GUIMor(cGrid, nCanvasHeight, nCanvasWidth)
-btQuit = Button(wApp, text="Quiter", command=wApp.destroy)
-btQuit.grid(row=2, column=1, padx=3, pady=3, sticky='nswe')
-btQuit = Button(wApp, text="Rejouer", command=lambda: replay(mGame))
-btQuit.grid(row=2, column=0, padx=3, pady=3, sticky='nswe')
-wApp.bind('<Motion>', mGame.disp)
-cGrid.bind('<Button>', onCanvasClick)
-wApp.title("Morpion")
-wApp.resizable(False, False)
-wApp.after(20, mGame.disp)
-wApp.mainloop()
+if __name__ == "__main__":
+    wApp = Tk()
+    cGrid = Canvas(wApp, bg=sCanvasBG, height=nCanvasHeight, width=nCanvasWidth)
+    cGrid.grid(row=0, column=0, columnspan=2 ,rowspan=2, padx = 3, pady = 3)
+    mGame = GUIMor(cGrid, nCanvasHeight, nCanvasWidth)
+    btQuit = Button(wApp, text="Quiter", command=wApp.destroy)
+    btQuit.grid(row=2, column=1, padx=3, pady=3, sticky='nswe')
+    btQuit = Button(wApp, text="Rejouer", command=lambda: replay(mGame))
+    btQuit.grid(row=2, column=0, padx=3, pady=3, sticky='nswe')
+    cGrid.bind('<Button>', onCanvasClick)
+    wApp.title("Morpion")
+    wApp.resizable(False, False)
+    show()
+    wApp.mainloop()
