@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
     Copyright © 2018-2019 Antoine COMBET
@@ -28,6 +28,7 @@ import os
 import time
 from random import random
 
+try:
     assert __name__ == "__main__"
     from morpion_bots import DumbBot, SmartBot
 except (ImportError, AssertionError):
