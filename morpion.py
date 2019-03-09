@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-    Copyright © 2019 Antoine COMBET
+    Copyright © 2018-2019 Antoine COMBET
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,15 +23,14 @@ from __future__ import division
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-import sys
 import platform
 import os
 import time
 from random import random
 
-try:
+    assert __name__ == "__main__"
     from morpion_bots import DumbBot, SmartBot
-except ImportError:
+except (ImportError, AssertionError):
     BOTS = False
 else:
     BOTS = True
@@ -40,11 +39,7 @@ COORD_CONV = {"A1":(0,0), "B1":(0,1), "C1":(0,2),
               "A2":(1,0), "B2":(1,1), "C2":(1,2),
               "A3":(2,0), "B3":(2,1), "C3":(2,2)}
 def s_input(prompt):
-    if sys.version[0] == '2':
-        return raw_input(prompt)
-        pass
-    else:
-       return input(prompt) 
+    return input(prompt) 
 
 def clear_screen():
     if 'Windows' in platform.platform() :
@@ -389,7 +384,7 @@ def runbot(game, t):
     
 
 if __name__ == '__main__':
-    print("""    Morpion  Copyright © 2018  Antoine COMBET
+    print("""    Morpion  Copyright © 2018-2019  Antoine COMBET
     This program comes with ABSOLUTELY NO WARRANTY.
     This is free software, and you are welcome to redistribute it
     under certain conditions.
@@ -405,7 +400,7 @@ if __name__ == '__main__':
             print("Les Joueurs automatiques sont disponibles.\nPour jouer con"+
                   "tre un autre joueur, entrez 0\nPour jouer contre l'orrdina"+
                   "teur en mode aléatoire, entrez 1\nPour jouer contre un ord"+
-                  "inateur 'optimal', entrez 2.")
+                  'inateur "optimal", entrez 2.')
             mode = s_input(">>>")
         if mode == '0':
             replay = run2j(mor)
