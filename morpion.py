@@ -36,41 +36,44 @@ except (ImportError, AssertionError):
 else:
     BOTS = True
 
-COORD_CONV = {"A1":(0,0), "B1":(0,1), "C1":(0,2),
-              "A2":(1,0), "B2":(1,1), "C2":(1,2),
-              "A3":(2,0), "B3":(2,1), "C3":(2,2)}
+COORD_CONV = {"A1": (0, 0), "B1": (0, 1), "C1": (0, 2),
+              "A2": (1, 0), "B2": (1, 1), "C2": (1, 2),
+              "A3": (2, 0), "B3": (2, 1), "C3": (2, 2)}
+
+
 def s_input(prompt):
-    return input(prompt) 
+    return input(prompt)
+
 
 def clear_screen():
-    if 'Windows' in platform.platform() :
+    if 'Windows' in platform.platform():
         os.system("CLS")
     else:
         os.system("clear")
 
+
 class Morpion(object):
-    
+
     def __init__(self, chars=[" ", "X", "O"]):
         self.grid = [[0, 0, 0],
                      [0, 0, 0],
                      [0, 0, 0]]
         self.disp_chars = chars
-    
+
     def reinit(self):
         self.grid = [[0, 0, 0],
                      [0, 0, 0],
                      [0, 0, 0]]
-        
-    
+
     def play(self, cell, player):
-        if not (0 <= cell[0] and cell[0]<3 and 0<=cell[1] and cell[1]<3):
+        if not (0 <= cell[0] and cell[0] < 3 and 0 <= cell[1] and cell[1] < 3):
             return 1
         elif self.grid[cell[0]][cell[1]] != 0:
             return 2
         else:
             self.grid[cell[0]][cell[1]] = player
         return 0
-    
+
     def disp(self):
         clear_screen()
         print("      A   B   C  ")
@@ -83,7 +86,7 @@ class Morpion(object):
                 print("| " + self.disp_chars[cell], end=" ")
             print("|")
         print("    +---+---+---+")
-    
+
     def check_win(self):
         A1 = self.grid[0][0]
         B1 = self.grid[0][1]
@@ -94,20 +97,22 @@ class Morpion(object):
         A3 = self.grid[2][0]
         B3 = self.grid[2][1]
         C3 = self.grid[2][2]
-        if A1 == B1 and A1 == C1:
+        if A1 == B1 and A1 == C1 and not A1 == 0:
             return A1
-        elif A1 == A2 and A1 == A3:
+        elif A1 == A2 and A1 == A3 and not A1 == 0:
             return A1
-        elif B1 == B2 and B1 == B3:
+        elif B1 == B2 and B1 == B3 and not B1 == 0:
             return B1
-        elif A2 == B2 and A2 == C2:
+        elif A2 == B2 and A2 == C2 and not A2 == 0:
             return A2
-        elif C1 == C2 and C1 == C3:
+        elif C1 == C2 and C1 == C3 and not C1 == 0:
             return C1
-        elif A1 == B2 and A1 == C3:
+        elif A1 == B2 and A1 == C3 and not A1 == 0:
             return A1
-        elif C1 == B2 and C1 == A3:
+        elif C1 == B2 and C1 == A3 and not C1 == 0:
             return C1
+        elif A3 == B3 and A3 == C3 and not A3 == 0:
+            return A3
         else:
             full = True
             for line in self.grid:
@@ -118,7 +123,8 @@ class Morpion(object):
                 return 0
             else:
                 return 3
-    
+
+
 def parse(command):
     cmds = []
     inst = ""
@@ -137,6 +143,7 @@ def parse(command):
         cmds.pop(i)
     return cmds
 
+
 def run2j(game):
     rep = True
     p1_turn = True
@@ -150,114 +157,107 @@ def run2j(game):
             if cmd == []:
                 cmd = [None]
 
-            if cmd[0] in ["JOUER", "J"] and len(cmd)>=2:
+            if cmd[0] in ["JOUER", "J"] and len(cmd) >= 2:
                 if cmd[1] in COORD_CONV.keys():
-                    result = game.play(COORD_CONV[cmd[1]],1)
-                    if result == 2: #case déja utilisée
+                    result = game.play(COORD_CONV[cmd[1]], 1)
+                    if result == 2:  # case déja utilisée
                         print("Case " + cmd[1] + " déjà occupée")
                         time.sleep(1)
-                    
+
                     else:
                         played = True
-                
-                
+
                 else:
                     print("coordonnés invalides")
                     time.sleep(1)
-                
-            
+
             elif cmd[0] in ["QUITER", "QUIT", "Q"]:
                 quited = True
                 rep = False
-            
+
             elif cmd[0] in ["REJOUER", "RJ", "R"]:
                 quited = True
-                rep  = True
+                rep = True
 
             elif cmd[0] == "MAKEHIMWIN" and len(cmd) == 2:
                 try:
                     p = int(cmd[1])
-                    assert p in [1,2]
-                except:
+                    assert p in [1, 2]
+                except (ValueError, AssertionError):
                     print("commande invalide")
                     time.sleep(1)
                     continue
                 game.grid = [[p for i in range(3)] for i in range(3)]
-                
+
             elif cmd[0] == "H":
                 clear_screen()
-                print("Pour jouer une case entrez :\n    jouer <coordonées>\n"+
-                      "    j <coordonées>\noù <coordonées> sont les coordonée"+
-                      "s de la case telles que A1\nPour relancer la partie, e"+
-                      "ntrez:\n    rejouer\n    rj\n    r\nPour afficher ulté"+
-                      "rieurement cette aide, entrez:\n    h\nPour quiter, en"+
-                      "trez:\n    quiter\n    quit\n    q\n")
+                print("Pour jouer une case entrez :\n   jouer <coordonées>\n" +
+                      "   j <coordonées>\noù <coordonées> sont les coordonée" +
+                      "s de la case tel que A1\nPour relancer la partie, e" +
+                      "ntrez:\n   rejouer\n   rj\n   r\nPour afficher ulté" +
+                      "rieurement cette aide, entrez:\n   h\nPour quiter, en" +
+                      "trez:\n   quiter\n   quit\n   q\n")
                 time.sleep(5)
             else:
                 print("commande invalide")
                 time.sleep(1)
 
-        
         else:
             game.disp()
             inp = s_input("Au tour du Joueur 2 (h pour l'aide)\n>>> ")
             cmd = parse(inp)
             if cmd == []:
                 cmd = [None]
-            
-            if cmd[0] in ["JOUER", "J"] and len(cmd)>=2:
+
+            if cmd[0] in ["JOUER", "J"] and len(cmd) >= 2:
                 if cmd[1] in COORD_CONV.keys():
-                    result = game.play(COORD_CONV[cmd[1]],2)
+                    result = game.play(COORD_CONV[cmd[1]], 2)
                     if result == 2:
                         print("Case " + cmd[1] + " déjà occupée")
                         time.sleep(1)
-                    
+
                     else:
                         played = True
-                
-                
+
                 else:
                     print("coordonnés invalides")
                     time.sleep(1)
-                    
-            
+
             elif cmd[0] in ["QUITER", "QUIT", "Q"]:
                 quited = True
                 rep = False
 
-
             elif cmd[0] == "MAKEHIMWIN" and len(cmd) == 2:
                 try:
                     p = int(cmd[1])
-                    assert p in [1,2]
-                except:
+                    assert p in [1, 2]
+                except (ValueError, AssertionError):
                     print("commande invalide")
                     time.sleep(1)
                     continue
                 game.grid = [[p for i in range(3)] for i in range(3)]
-                
+
             elif cmd[0] in ["REJOUER", "RJ", "R"]:
                 quited = True
-                rep  = True
-            
+                rep = True
+
             elif cmd[0] == "H":
                 clear_screen()
-                print("Pour jouer une case entrez :\n    jouer <coordonées>\n"+
-                      "    j <coordonées>\noù <coordonées> sont les coordonée"+
-                      "s de la case telles que A1\nPour relancer la partie, e"+
-                      "ntrez:\n    rejouer\n    rj\n    r\nPour afficher ulté"+
-                      "rieurement cette aide, entrez:\n    h\nPour quiter, en"+
-                      "trez:\n    quiter\n    quit\n    q\n")
+                print("Pour jouer une case entrez :\n   jouer <coordonées>\n" +
+                      "   j <coordonées>\noù <coordonées> sont les coordonée" +
+                      "s de la case tel que A1\nPour relancer la partie, e" +
+                      "ntrez:\n   rejouer\n   rj\n   r\nPour afficher ulté" +
+                      "rieurement cette aide, entrez:\n   h\nPour quiter, en" +
+                      "trez:\n   quiter\n   quit\n   q\n")
                 time.sleep(5)
-            
+
             else:
                 print("commande invalide")
                 time.sleep(1)
-            
-        
+
         if played:
             p1_turn = not p1_turn
-            
+
     game.disp()
     if not quited:
         if not game.check_win() == 3:
@@ -268,15 +268,16 @@ def run2j(game):
         srep = s_input("Voulez-vous rejouer ?(o/n)").lower()
         if srep == "n":
             rep = False
-        
+
         else:
             rep = True
-            
+
     if rep:
         clear_screen()
         print('Nouvelle Partie')
         time.sleep(1)
     return rep
+
 
 def runbot(game, t):
     clear_screen()
@@ -307,62 +308,58 @@ def runbot(game, t):
             if cmd == []:
                 cmd = [None]
 
-            if cmd[0] in ["JOUER", "J"] and len(cmd)>=2:
+            if cmd[0] in ["JOUER", "J"] and len(cmd) >= 2:
                 if cmd[1] in COORD_CONV.keys():
-                    result = game.play(COORD_CONV[cmd[1]],p)
-                    if result == 2: #case déja utilisée
+                    result = game.play(COORD_CONV[cmd[1]], p)
+                    if result == 2:  # case déja utilisée
                         print("Case " + cmd[1] + " déjà occupée")
                         time.sleep(1)
-                    
+
                     else:
                         played = True
-                
-                
+
                 else:
                     print("coordonnés invalides")
                     time.sleep(1)
-                
-            
+
             elif cmd[0] in ["QUITER", "QUIT", "Q"]:
                 quited = True
                 rep = False
-            
+
             elif cmd[0] in ["REJOUER", "RJ", "R"]:
                 quited = True
-                rep  = True
+                rep = True
 
             elif cmd[0] == "MAKEHIMWIN" and len(cmd) == 2:
                 try:
                     k = int(cmd[1])
-                    assert k in [1,2]
-                except:
+                    assert k in [1, 2]
+                except (ValueError, AssertionError):
                     print("commande invalide")
                     time.sleep(1)
                     continue
                 game.grid = [[k for i in range(3)] for i in range(3)]
-                
+
             elif cmd[0] == "H":
                 clear_screen()
-                print("Pour jouer une case entrez :\n    jouer <coordonées>\n"+
-                      "    j <coordonées>\noù <coordonées> sont les coordonée"+
-                      "s de la case telles que A1\nPour relancer la partie, e"+
-                      "ntrez:\n    rejouer\n    rj\n    r\nPour afficher ulté"+
-                      "rieurement cette aide, entrez:\n    h\nPour quiter, en"+
-                      "trez:\n    quiter\n    quit\n    q\n")
+                print("Pour jouer une case entrez :\n   jouer <coordonées>\n" +
+                      "   j <coordonées>\noù <coordonées> sont les coordonée" +
+                      "s de la case tel que A1\nPour relancer la partie, e" +
+                      "ntrez:\n   rejouer\n   rj\n   r\nPour afficher ulté" +
+                      "rieurement cette aide, entrez:\n   h\nPour quiter, en" +
+                      "trez:\n   quiter\n   quit\n   q\n")
                 time.sleep(5)
             else:
                 print("commande invalide")
                 time.sleep(1)
 
-        
         else:
             bot.play()
             played = True
-            
-        
+
         if played:
             p_turn = not p_turn
-            
+
     game.disp()
     if not quited:
         if not game.check_win() == 3:
@@ -373,16 +370,16 @@ def runbot(game, t):
         srep = s_input("Voulez-vous rejouer ?(o/n)").lower()
         if srep == "n":
             rep = False
-        
+
         else:
             rep = True
-            
+
     if rep:
         clear_screen()
         print('Nouvelle Partie')
         time.sleep(1)
     return rep
-    
+
 
 if __name__ == '__main__':
     print("""    Morpion  Copyright © 2018-2019  Antoine COMBET
@@ -398,10 +395,10 @@ if __name__ == '__main__':
         if not BOTS:
             mode = '0'
         else:
-            print("Les Joueurs automatiques sont disponibles.\nPour jouer con"+
-                  "tre un autre joueur, entrez 0\nPour jouer contre l'orrdina"+
-                  "teur en mode aléatoire, entrez 1\nPour jouer contre un ord"+
-                  'inateur "optimal", entrez 2.')
+            print("Les Joueurs auto sont disponibles.\nPour jouer con" +
+                  "tre un autre joueur, entrez 0\nPour jouer contre l'orrdi" +
+                  "en mode aléatoire, entrez 1\nPour jouer contre un ord" +
+                  'i "optimal", entrez 2.')
             mode = s_input(">>>")
         if mode == '0':
             replay = run2j(mor)

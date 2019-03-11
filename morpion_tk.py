@@ -16,57 +16,72 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from morpion import Morpion
+from morpion import Morpion, DumbBot, SmartBot
+from random import randint
 import tkinter as tk
 
+# --------------------------------
+# Constantes et variables globales
+# --------------------------------
 
-# Constantes
+# Constantes du canevas
 nCanvasHeight = 300
 nCanvasWidth = 300
 sCanvasBG = 'white'
+
+# Joueur en ccours
 nPlayer = 1
+
+# Partie gagnée
 bWon = False
 
 
+# -----------------------------------------------------------------------------
 # Classe héritant du morpion texte pour pouvoir réutiliser les parties logiques
+# -----------------------------------------------------------------------------
+
 class GUIMor(Morpion):
     def __init__(self, cCanvas):
         Morpion.__init__(self)
-        #Pointeur vers le Canvas
-        self.cCanvas=cCanvas
-        
-# Réécriture de la methode d'affichage
+        # Pointeur vers le Canvas
+        self.cCanvas = cCanvas
+
+    # Réécriture de la methode d'affichage
     def disp(self):
         self.cCanvas.delete(tk.ALL)
         # La grille
         for i in range(3):
-            self.cCanvas.create_line((i*nCanvasWidth)//3 , 0,
+            self.cCanvas.create_line((i*nCanvasWidth)//3, 0,
                                      (i*nCanvasWidth)//3, nCanvasHeight,
-                                     width = 3)
-            self.cCanvas.create_line(0, (i*nCanvasHeight)//3 , nCanvasWidth,
-                                     (i*nCanvasHeight)//3 , width = 3)
+                                     width=3)
+            self.cCanvas.create_line(0, (i*nCanvasHeight)//3, nCanvasWidth,
+                                     (i*nCanvasHeight)//3, width=3)
         # Le contenu des cases
         for c in range(3):
             for r in range(3):
-                if self.grid[r][c] == 1: # Les "X"
+                if self.grid[r][c] == 1:  # Les "X"
                     self.cCanvas.create_line(((c*nCanvasWidth)//3) + 15,
                                              ((r*nCanvasHeight)//3) + 15,
                                              (((c + 1)*nCanvasWidth)//3) - 15,
                                              (((r + 1)*nCanvasHeight)//3) - 15,
-                                             width = 3, fill='red')
+                                             width=3, fill='red')
                     self.cCanvas.create_line((((c + 1)*nCanvasWidth)//3) - 15,
                                              ((r*nCanvasHeight)//3) + 15,
-                                             ((c*nCanvasWidth)//3) + 15 ,
+                                             ((c*nCanvasWidth)//3) + 15,
                                              (((r + 1)*nCanvasHeight)//3) - 15,
-                                             width = 3, fill='red')
-                elif self.grid[r][c] == -1: # Les "O"
+                                             width=3, fill='red')
+                elif self.grid[r][c] == -1:  # Les "O"
                     self.cCanvas.create_oval(((c*nCanvasWidth)//3) + 15,
                                              ((r*nCanvasHeight)//3) + 15,
                                              (((c + 1)*nCanvasWidth)//3) - 15,
                                              (((r + 1)*nCanvasHeight)//3) - 15,
-                                             width = 3, outline='blue')
-        
-        
+                                             width=3, outline='blue')
+
+
+# ---------
+# Fonctions
+# ---------
+
 def replay(mGame):
     # Réinitialise le jeu
     global nPlayer, bWon
@@ -75,8 +90,9 @@ def replay(mGame):
     bWon = False
     show()
 
+
 def show():
-    # N'affiche que si la partie n'est pas gagnée 
+    # N'affiche que si la partie n'est pas gagnée
     # (pour laisser le message affiché)
     if not bWon:
         mGame.cCanvas.delete(tk.ALL)
@@ -84,25 +100,28 @@ def show():
     else:
         return None
 
-# Fonction appelée lord d'un clic sur le canvas
+
 def onCanvasClick(event):
+    # Fonction appelée lord d'un clic sur le canvas
     global nPlayer, bWon
-    
-    if bWon : return None # La partie est gagnée, rien à faire
-    
-    nCol = (3 * event.x)//nCanvasWidth #  Transformation de souris(x, y)
-    nRow = (3 * event.y)//nCanvasHeight # en tableau[ligne][colone]
-    
-    if mGame.grid[nRow][nCol] == 0: #     Si la case cliquée est vide
-        mGame.play((nRow,nCol),nPlayer) # Joue la case
-        nPlayer = - nPlayer #             Et change le joueur
-        
-    nWinner=mGame.check_win() # Vérifie les victoire
-    
-    if nWinner in [-1, 1, 3]: # Si quelqu'un à gagné (1 ou -1) ou si il y a 
-#                               match nul (3)
-        bWon = True # Marque la partie comme finie
-        
+
+    if bWon:
+        return None
+    # La partie est gagnée, rien à faire
+
+    nCol = (3 * event.x)//nCanvasWidth  # Transformation de souris(x, y)
+    nRow = (3 * event.y)//nCanvasHeight  # en tableau[ligne][colone]
+
+    if mGame.grid[nRow][nCol] == 0:  # Si la case cliquée est vide
+        mGame.play((nRow, nCol), nPlayer)  # Joue la case
+        nPlayer = - nPlayer  # Et change le joueur
+
+    nWinner = mGame.check_win()  # Vérifie les victoire
+
+    if nWinner in [-1, 1, 3]:  # Si quelqu'un à gagné (1 ou -1) ou si il y a
+        # match nul (3)
+        bWon = True  # Marque la partie comme finie
+
         # Et affiche le message adapté
         if nWinner == -1:
             mGame.cCanvas.delete(tk.ALL)
@@ -114,19 +133,22 @@ def onCanvasClick(event):
         elif nWinner == 3:
             mGame.cCanvas.delete(tk.ALL)
             mGame.cCanvas.create_text(150, 150, text="Match Nul!")
-    
+
     # Met à jour l'affichage
     show()
 
 
-# Ne s'execute que si le script est lancé directement
+# -------------------------------------------------------------------------
+# Programme principal - Ne s'execute que si le script est lancé directement
+# -------------------------------------------------------------------------
+
 if __name__ == "__main__":
     # Creation de la fenetre
     wApp = tk.Tk()
     # Creation du canvas et grid dans wApp
     cGrid = tk.Canvas(wApp, bg=sCanvasBG, height=nCanvasHeight,
                       width=nCanvasWidth)
-    cGrid.grid(row=0, column=0, columnspan=2 ,rowspan=2, padx = 3, pady = 3)
+    cGrid.grid(row=0, column=0, columnspan=2, rowspan=2, padx=3, pady=3)
     # Instanciation du moteur de jeu
     mGame = GUIMor(cGrid)
     # Les boutons
